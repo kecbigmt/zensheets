@@ -1,0 +1,26 @@
+{
+  "timeZone": "America/New_York",
+  "dependencies": {
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8",
+  "addOns": {
+    "common": {
+      "name": "ZenSheets",
+      "logoUrl": "https://lh3.googleusercontent.com/-WUvqS0jn74I/YKw3BtD4TAI/AAAAAAAAAB4/YVOT3S6nlvQ2fhfzJ6SIHLMkN5Chq6MXwCLcBGAsYHQ/s400/icon_128x128.png",
+      "homepageTrigger": { "runFunction": "onHomepage" }
+    },
+    "sheets": {
+
+    }
+  },
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/spreadsheets",
+    "https://www.googleapis.com/auth/script.container.ui",
+    "https://www.googleapis.com/auth/script.external_request"
+  ],
+  "urlFetchWhitelist": [
+    "https://api.github.com/",
+    "https://api.zenhub.com/"
+  ]
+}
