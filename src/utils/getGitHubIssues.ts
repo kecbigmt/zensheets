@@ -29,12 +29,26 @@ type GitHubLabel = {
   default: boolean;
 };
 
-export const getGitHubIssues = (
+export const getGitHubIssuesByOwnerAndRepo = (
   githubApiToken: string,
   owner: string,
   repo: string,
   labels?: string
 ): GitHubIssue[] => {
+  let path = `/repos/${owner}/${repo}/issues${labels ? "?labels=" + labels : ""}`;
+  return getGitHubIssuesByPath(githubApiToken, path);
+};
+
+export const getGitHubIssuesByRepoId = (
+  githubApiToken: string,
+  repoId: string,
+  labels?: string
+): GitHubIssue[] => {
+  let path = `/repositories/${repoId}/issues${labels ? "?labels=" + labels : ""}`;
+  return getGitHubIssuesByPath(githubApiToken, path);
+};
+
+const getGitHubIssuesByPath = (githubApiToken: string, path: string): GitHubIssue[] => {
   const options = {
     method: "get" as GoogleAppsScript.URL_Fetch.HttpMethod,
     headers: {
@@ -45,9 +59,7 @@ export const getGitHubIssues = (
   };
 
   const issues: GitHubIssue[] = [];
-  let url =
-    GITHUB_DEFAULT_ENDPOINT +
-    `/repos/${owner}/${repo}/issues${labels ? "?labels=" + labels : ""}`;
+  let url = GITHUB_DEFAULT_ENDPOINT + path;
   
   while (url) {
     if (!url) {
@@ -73,6 +85,4 @@ export const getGitHubIssues = (
   }
 
   return issues;
-};
-
-export default getGitHubIssues;
+}
