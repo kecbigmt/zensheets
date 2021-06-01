@@ -1,6 +1,14 @@
 import { getGitHubIssuesByOwnerAndRepo, getGitHubIssuesByRepoId } from "./utils/getGitHubIssues";
 import getZenHubBoard from "./utils/getZenHubBoard";
 
+/**
+ * GitHub issues (get by the repository owner name & repository name)
+ * 
+ * @param owner repository owner name
+ * @param repo repository name
+ * @param labels comma-separated labels to filter e.g. "bug,wontfix"
+ * @returns {(string|number)[][]} issues (number, title, state, asignees, labels)
+ */
 function GITHUB_ISSUES(owner: string, repo: string, labels?: string): any[][] {
   if (!owner || !repo) {
     throw new Error(`too few arguments`);
@@ -35,6 +43,13 @@ function GITHUB_ISSUES(owner: string, repo: string, labels?: string): any[][] {
   return rows;
 }
 
+/**
+ * GitHub issues (get by the repository ID)
+ * 
+ * @param repoId repository ID e.g. "8514"
+ * @param labels comma-separated labels to filter e.g. "bug,wontfix"
+ * @returns {(string|number)[][]} issues (number, title, state, asignees, labels)
+ */
 function GITHUB_ISSUES_BY_REPOID(repoId: string, labels?: string): any[][] {
   if (!repoId) {
     throw new Error(`too few arguments`);
@@ -69,6 +84,13 @@ function GITHUB_ISSUES_BY_REPOID(repoId: string, labels?: string): any[][] {
   return rows;
 }
 
+/**
+ * ZenHub issues
+ * 
+ * @param workspaceId the ID of the ZenHub Workspace. This is found in the URL for the workspace. e.g. "5f6b5c9ab4fd7d76a3e5b7d8"
+ * @param repoId the ID of the GitHub repository, not its full name. This is found in the URL for the workspace. e.g. "47655910"
+ * @returns {(string|number)[][]} issues (pipeline_id, pipeline_name, issue_number, is_epic, estimate_value, position)
+ */
 function ZENHUB_ISSUES(workspaceId: string, repoId: string): any[][] {
   if (!workspaceId || !repoId) {
     throw new Error(`too few arguments`);
