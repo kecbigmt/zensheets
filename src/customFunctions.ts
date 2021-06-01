@@ -1,7 +1,7 @@
 import getGitHubIssues from "./utils/getGitHubIssues";
 import getZenHubBoard from "./utils/getZenHubBoard";
 
-function GITHUBISSUES(owner: string, repo: string, labels?: string): any[][] {
+function GITHUB_ISSUES(owner: string, repo: string, labels?: string): any[][] {
   if (!owner || !repo) {
     throw new Error(`too few arguments`);
   }
@@ -35,7 +35,7 @@ function GITHUBISSUES(owner: string, repo: string, labels?: string): any[][] {
   return rows;
 }
 
-function ZENHUBISSUES(workspaceId: string, repoId: string): any[][] {
+function ZENHUB_ISSUES(workspaceId: string, repoId: string): any[][] {
   if (!workspaceId || !repoId) {
     throw new Error(`too few arguments`);
   }
