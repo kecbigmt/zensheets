@@ -1,3 +1,5 @@
+import parseLinkHeader from './parseLinkHeader';
+
 const GITHUB_DEFAULT_ENDPOINT = "https://api.github.com";
 
 // ref. https://docs.github.com/en/rest/reference/issues#list-issues-assigned-to-the-authenticated-user
@@ -42,17 +44,33 @@ export const getGitHubIssues = (
     contentType: "application/json",
   };
 
-  const url =
+  const issues: GitHubIssue[] = [];
+  let url =
     GITHUB_DEFAULT_ENDPOINT +
     `/repos/${owner}/${repo}/issues${labels ? "?labels=" + labels : ""}`;
+  
+  while (url) {
+    if (!url) {
+      break;
+    }
 
-  const resp = UrlFetchApp.fetch(url, options);
-  if (resp.getResponseCode() !== 200) {
-    throw new Error(
-      `github api error: code=${resp.getResponseCode()}, body=${resp.getContentText()}`
-    );
+    const resp = UrlFetchApp.fetch(url, options);
+    if (resp.getResponseCode() !== 200) {
+      throw new Error(
+        `github api error: code=${resp.getResponseCode()}, body=${resp.getContentText()}`
+      );
+    }
+    issues.push(...JSON.parse(resp.getContentText()));
+    url = '';
+
+    const linkHeader = resp.getHeaders()['Link'];
+    if (typeof linkHeader === 'string') {
+      const links = parseLinkHeader(linkHeader);
+      if (links.next) {
+        url = links.next;
+      }
+    }
   }
-  const issues: GitHubIssue[] = JSON.parse(resp.getContentText());
 
   return issues;
 };
