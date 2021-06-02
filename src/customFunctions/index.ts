@@ -1,5 +1,5 @@
-import { getGitHubIssuesByOwnerAndRepo, getGitHubIssuesByRepoId } from "./utils/getGitHubIssues";
-import getZenHubBoard from "./utils/getZenHubBoard";
+import { getGitHubIssuesByOwnerAndRepo, getGitHubIssuesByRepoId } from "../utils/getGitHubIssues";
+import getZenHubBoard from "../utils/getZenHubBoard";
 
 /**
  * GitHub issues (get by the repository owner name & repository name)
