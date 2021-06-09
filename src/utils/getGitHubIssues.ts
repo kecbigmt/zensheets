@@ -33,18 +33,30 @@ export const getGitHubIssuesByOwnerAndRepo = (
   githubApiToken: string,
   owner: string,
   repo: string,
+  state?: string,
   labels?: string
 ): GitHubIssue[] => {
-  let path = `/repos/${owner}/${repo}/issues${labels ? "?labels=" + labels : ""}`;
+  const params = ['state=' + (state ?? 'open')];
+  if (labels) {
+    params.push('labels=' + encodeURIComponent(labels));
+  }
+  
+  let path = `/repos/${owner}/${repo}/issues?${params.join('&')}`;
   return getGitHubIssuesByPath(githubApiToken, path);
 };
 
 export const getGitHubIssuesByRepoId = (
   githubApiToken: string,
   repoId: string,
+  state?: string,
   labels?: string
 ): GitHubIssue[] => {
-  let path = `/repositories/${repoId}/issues${labels ? "?labels=" + labels : ""}`;
+  const params = ['state=' + (state ?? 'open')];
+  if (labels) {
+    params.push('labels=' + encodeURIComponent(labels));
+  }
+
+  let path = `/repositories/${repoId}/issues?${params.join('&')}`;
   return getGitHubIssuesByPath(githubApiToken, path);
 };
 

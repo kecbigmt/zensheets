@@ -6,10 +6,11 @@ import getZenHubBoard from "../utils/getZenHubBoard";
  * 
  * @param owner repository owner name
  * @param repo repository name
+ * @param state the state of the issues to return. Can be either `open`, `closed`, or `all`. Default: `open`
  * @param labels comma-separated labels to filter e.g. "bug,wontfix"
  * @returns {(string|number)[][]} issues (number, title, state, asignees, labels)
  */
-function GITHUB_ISSUES(owner: string, repo: string, labels?: string): any[][] {
+function GITHUB_ISSUES(owner: string, repo: string, state?: string, labels?: string): any[][] {
   if (!owner || !repo) {
     throw new Error(`too few arguments`);
   }
@@ -19,7 +20,7 @@ function GITHUB_ISSUES(owner: string, repo: string, labels?: string): any[][] {
     throw new Error(`github api token not set`);
   }
 
-  const issues = getGitHubIssuesByOwnerAndRepo(githubApiToken, owner, repo, labels);
+  const issues = getGitHubIssuesByOwnerAndRepo(githubApiToken, owner, repo, state, labels);
 
   const rows: any[][] = [["number", "title", "state", "asignnees", "labels"]];
   issues.forEach((issue) => {
@@ -47,10 +48,11 @@ function GITHUB_ISSUES(owner: string, repo: string, labels?: string): any[][] {
  * GitHub issues (get by the repository ID)
  * 
  * @param repoId repository ID e.g. "8514"
+ * @param state the state of the issues to return. Can be either `open`, `closed`, or `all`. Default: `open`
  * @param labels comma-separated labels to filter e.g. "bug,wontfix"
  * @returns {(string|number)[][]} issues (number, title, state, asignees, labels)
  */
-function GITHUB_ISSUES_BY_REPOID(repoId: string, labels?: string): any[][] {
+function GITHUB_ISSUES_BY_REPOID(repoId: string, state?: string, labels?: string): any[][] {
   if (!repoId) {
     throw new Error(`too few arguments`);
   }
@@ -60,7 +62,7 @@ function GITHUB_ISSUES_BY_REPOID(repoId: string, labels?: string): any[][] {
     throw new Error(`github api token not set`);
   }
 
-  const issues = getGitHubIssuesByRepoId(githubApiToken, repoId, labels);
+  const issues = getGitHubIssuesByRepoId(githubApiToken, repoId, state, labels);
 
   const rows: any[][] = [["number", "title", "state", "asignnees", "labels"]];
   issues.forEach((issue) => {
