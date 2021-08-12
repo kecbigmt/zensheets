@@ -65,11 +65,11 @@ Stay in the GAS project console.
 3. Click [Deploy]
 4. You will see Deployment ID & version number. Write them down
 
-### 5. App Configuration
+### 6. App Configuration
 1. Go back to GCP console & go to Google Workspace Marketplace SDK console, or open https://console.cloud.google.com/apis/api/appsmarket-component.googleapis.com
 2. Then go to [App Configuration]
 
-#### 5-1. App Integration
+#### 6-1. App Integration
 1. Check [Google Workspace Add-on]
 2. Select [Deploy using Apps Script deployment id]
 3. Enter Deployment ID of your GAS project
@@ -77,17 +77,17 @@ Stay in the GAS project console.
 5. Enter [Sheets Add-on Project Script ID] (You can find it on [Project Setting] of your GAS project)
 6. Enter [Sheets Add-on script version] (You should have found it when deploying GAS)
 
-#### 5-2. Developer Links
+#### 6-2. Developer Links
 1. Enter [Developer Name]
 2. Enter [Developer Website URL]. Anything is OK
 3. Enter [Developer Email]
 
-#### 5-3. App Visibility
+#### 6-3. App Visibility
 1. Select [Private]
 
 Finnaly, click [SAVE].
 
-### 6. Store Listing & publish
+### 7. Store Listing & publish
 1. Go to [Store Listing] in Google Workspace Marketplace SDK console
 2. Fill in the required fields. Upload your graphic assets & enter the URL of your Google Docs page in [Support Links]
 3. Click [PUBLISH]
@@ -102,3 +102,10 @@ Now, you can find the add-on on your spreadsheet. Enjoy it!
 ```bash
 clasp setting scriptId <Destination Script ID>
 ```
+
+### New deployment
+1. 'clasp push'
+2. Deploy the project (See '5. Deploy the project')
+3. Copy new Deployment ID & version number
+4. Go to Google Workspace Marketplace SDK console in GCP（See '6. App Configuration'）
+5. Update [Deployment ID] & [Sheets Add-on script version] with new ones（See '6-1. App Integration'）
