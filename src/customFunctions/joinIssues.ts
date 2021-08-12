@@ -43,6 +43,7 @@ function JOIN_ISSUES(
   const zenhubIssueNumberIndex = zenhubIssuesHeader.indexOf("issue_number");
   const zenhubEstimateValueIndex = zenhubIssuesHeader.indexOf("estimate_value");
   const zenhubPositionIndex = zenhubIssuesHeader.indexOf("position");
+  const zenhubParentEpicsIndex = zenhubIssuesHeader.indexOf("parent_epics");
 
   let insufficientZenHubColumns: string[] = [];
   if (zenhubPipelineNameIndex < 0)
@@ -80,6 +81,7 @@ function JOIN_ISSUES(
   ];
   if (pspLabelPrefix) header.push("pessimistic_sp");
   if (ospLabelPrefix) header.push("optimistic_sp");
+  if (zenhubParentEpicsIndex >= 0) header.push("parent_epics");
 
   const bodyRows = githubIssues.slice(1).map((githubIssue) => {
     let labels = String(githubIssue[githubLabelsIndex]);
@@ -104,12 +106,16 @@ function JOIN_ISSUES(
     let position = undefined;
     let isEpic = undefined;
     let mostLikelySp = undefined;
+    let parentEpics = "";
     if (typeof zenhubIssueIndex !== "undefined") {
       const zenhubIssue = zenhubIssues[zenhubIssueIndex + 1];
       pipelineName = zenhubIssue[zenhubPipelineNameIndex];
       position = zenhubIssue[zenhubPositionIndex];
       isEpic = zenhubIssue[zenhubIsEpicIndex];
       mostLikelySp = zenhubIssue[zenhubEstimateValueIndex];
+      if (zenhubParentEpicsIndex >= 0) {
+        parentEpics = zenhubIssue[zenhubParentEpicsIndex];
+      }
     }
 
     const row = [
@@ -126,6 +132,7 @@ function JOIN_ISSUES(
 
     if (pspLabelPrefix) row.push(psp);
     if (ospLabelPrefix) row.push(osp);
+    if (zenhubParentEpicsIndex >= 0) row.push(parentEpics);
 
     return row;
   });
