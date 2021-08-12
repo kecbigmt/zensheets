@@ -69,14 +69,14 @@ function JOIN_ISSUES(
   });
 
   const header = [
-    "pipeline_name",
-    "position",
-    "is_epic",
     "number",
     "title",
     "state",
     "asignees",
     "labels",
+    "pipeline_name",
+    "position",
+    "is_epic",
     "most_likely_sp",
   ];
   if (pspLabelPrefix) header.push("pessimistic_sp");
@@ -119,14 +119,14 @@ function JOIN_ISSUES(
     }
 
     const row = [
-      pipelineName,
-      position,
-      isEpic,
       issueNumber,
       githubIssue[githubTitleIndex],
       githubIssue[gihubStateIndex],
       githubIssue[githubAsignneesIndex],
       labels,
+      pipelineName,
+      position,
+      isEpic,
       mostLikelySp,
     ];
 
