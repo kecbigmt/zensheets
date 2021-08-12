@@ -1,5 +1,6 @@
 import { getGitHubIssuesByOwnerAndRepo, getGitHubIssuesByRepoId } from "../utils/getGitHubIssues";
 import getZenHubBoard from "../utils/getZenHubBoard";
+import getZenHubEpicData from "../utils/getZenHubEpicData";
 
 /**
  * GitHub issues (get by the repository owner name & repository name)
@@ -93,7 +94,7 @@ function GITHUB_ISSUES_BY_REPOID(repoId: string, state?: string, labels?: string
  * @param repoId the ID of the GitHub repository, not its full name. This is found in the URL for the workspace. e.g. "47655910"
  * @returns {(string|number)[][]} issues (pipeline_id, pipeline_name, issue_number, is_epic, estimate_value, position)
  */
-function ZENHUB_ISSUES(workspaceId: string, repoId: string): any[][] {
+function ZENHUB_ISSUES(workspaceId: string, repoId: string, withEpic?: boolean): any[][] {
   if (!workspaceId || !repoId) {
     throw new Error(`too few arguments`);
   }
@@ -105,6 +106,32 @@ function ZENHUB_ISSUES(workspaceId: string, repoId: string): any[][] {
 
   const board = getZenHubBoard(zenhubApiToken, workspaceId, repoId);
 
+  const issueEpicMap: { [issue_number: number]: number[] } = {};
+  if (withEpic) {
+    const epicIds: number[] = [];
+    
+    for (let pipeline of board.pipelines) {
+      for (let issue of pipeline.issues) {
+        if (issue.is_epic) {
+          if (!epicIds.includes(issue.issue_number)) {
+            epicIds.push(issue.issue_number);
+          }
+        }
+      }
+    }
+
+    for (let epicId of epicIds) {
+      const epicData = getZenHubEpicData(zenhubApiToken, repoId, epicId);
+      for (let issue of epicData.issues) {
+        if (typeof issueEpicMap[issue.issue_number] !== "undefined") {
+          issueEpicMap[issue.issue_number].push(epicId);
+        } else {
+          issueEpicMap[issue.issue_number] = [epicId];
+        }
+      }
+    }
+  }
+
   const rows: any[][] = [
     [
       "pipeline_id",
@@ -115,16 +142,26 @@ function ZENHUB_ISSUES(workspaceId: string, repoId: string): any[][] {
       "position",
     ],
   ];
+
+  if (withEpic) {
+    rows[0].push("parent_epics");
+  }
+
   board.pipelines.forEach((pipeline) => {
     pipeline.issues.forEach((issue) => {
-      rows.push([
+      const row = [
         pipeline.id,
         pipeline.name,
         issue.issue_number,
         issue.is_epic,
         issue.estimate?.value ?? "",
         issue.position ?? "",
-      ]);
+      ];
+      if (withEpic) {
+        const epicIds = issueEpicMap[issue.issue_number];
+        row.push(typeof epicIds !== "undefined" ? epicIds.join(",") : "");
+      }
+      rows.push(row);
     });
   });
 
