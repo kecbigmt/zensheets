@@ -1,4 +1,4 @@
-const ZENHUB_DEFAULT_ENDPOINT = "https://api.zenhub.com";
+import { ZENHUB_DEFAULT_ENDPOINT } from "./constants";
 
 // ref. https://github.com/ZenHubIO/API#get-a-zenhub-board-for-a-repository
 type ZenHubBoard = {
