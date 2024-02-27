@@ -32,6 +32,7 @@ function createConfigureCard() {
   const section = CardService.newCardSection()
     .addWidget(CardService.newTextInput().setFieldName('githubApiToken').setValue(githubApiToken).setTitle('GitHub API Token'))
     .addWidget(CardService.newTextInput().setFieldName('zenhubApiToken').setValue(zenhubApiToken).setTitle('ZenHub API Token'))
+    .addWidget(CardService.newTextInput().setFieldName('zenhubGraphqlApiKey').setValue(zenhubApiToken).setTitle('ZenHub GraphQL API Key'))
     .addWidget(CardService.newButtonSet().addButton(CardService.newTextButton().setText('Save').setOnClickAction(CardService.newAction().setFunctionName('onClickUpdate'))));
   builder.addSection(section);
 
@@ -41,11 +42,13 @@ function createConfigureCard() {
 function onClickUpdate(e) {
   const githubApiToken = e.formInput.githubApiToken;
   const zenhubApiToken = e.formInput.zenhubApiToken;
+  const zenhubGraphqlApiKey = e.formInput.zenhubGraphqlApiKey;
 
   const userProps = PropertiesService.getUserProperties();
   userProps.setProperties({
     GITHUB_API_TOKEN: githubApiToken,
     ZENHUB_API_TOKEN: zenhubApiToken,
+    ZENHUB_GRPAHQL_API_KEY: zenhubGraphqlApiKey,
   });
   Browser.msgBox('Configure saved');
 }
@@ -55,11 +58,12 @@ function buildConfigureSidebar() {
   SpreadsheetApp.getUi().showSidebar(htmlOutput);
 }
 
-function saveConfigure({ githubApiToken, zenhubApiToken }: { githubApiToken: string; zenhubApiToken: string }) {
+function saveConfigure({ githubApiToken, zenhubApiToken, zenhubGraphqlApiKey }: { githubApiToken: string; zenhubApiToken: string, zenhubGraphqlApiKey: string }) {
   const userProps = PropertiesService.getUserProperties();
   userProps.setProperties({
     githubApiToken,
     zenhubApiToken,
+    zenhubGraphqlApiKey,
   });
   Browser.msgBox('Configure saved');
 }
